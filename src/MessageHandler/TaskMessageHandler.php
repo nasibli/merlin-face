@@ -39,7 +39,7 @@ class TaskMessageHandler implements MessageHandlerInterface
         if ($result->status === 'error') {
             throw new \Exception('Task was processed with error');
         } else {
-            $task = $taskMessage->getTask();
+            $task = $this->taskRepository->find($taskMessage->getTask()->getId());
             if ($result->retry_id === null) {
                 $task->setResult($result->result);
                 $task->setStatus(Task::STATUS_READY);

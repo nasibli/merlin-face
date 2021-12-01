@@ -25,12 +25,6 @@ services:
         arguments:
             $photoStorage: '%env(resolve:PHOTO_STORAGE)%'
 
-
-    App\Service\TaskProcessorService:
-        arguments:
-            $endpoint: '%env(END_POINT)%'
-            $photoStorage: '%env(resolve:PHOTO_STORAGE)%'
-
     App\MessageHandler\TaskMessageHandler:
         arguments:
             $endpoint: '%env(END_POINT)%'
