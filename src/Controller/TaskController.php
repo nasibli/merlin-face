@@ -48,7 +48,7 @@ class TaskController extends AbstractController
         /** @var Task $task */
         $task = $this->taskRepository->find($taskId);
         if(empty($task)) {
-            throw new NotFoundHttpException('Task ' . $taskId . ' not found');
+            return $this->json(["status" => "not_found", "result" => null], Response::HTTP_NOT_FOUND);
         }
 
         return $this->json(
