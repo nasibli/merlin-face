@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+    php-fpm:
+        container_name: merlin-face-php-fpm
+        build: ./php-fpm
+        ports:
+            - "8000:8000"
+            - "9000:9000"
+        volumes:
+            - ../:/var/www/merlin-face
+        command: symfony server:start --no-tls
+    php-cli:
+        container_name: merlin-face-php-cli
+        build: ./php-cli
+        tty: true
+        volumes:
+            - ..:/var/www/merlin-face
+    beanstalk:
+        container_name: merlin-face-beanstalk
+        build: ./beanstalk
+        tty: true
+        ports:
+            - "11300:11300"
+        entrypoint: beanstalkd -l 0.0.0.0 -p 11300
