@@ -15,7 +15,7 @@ docker-compose down
 
 ### Project run
 ```
-docker-compose up
+docker-compose up -d
 docker exec merlin-face-php-cli php bin/console messenger:consume async
 ```
 
