@@ -5,16 +5,20 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            async:
-                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-                options:
-                    tube_name: tasks
+#            async:
+#                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+#                options:
+#                    tube_name: tasks
+#                retry_strategy:
+#                    max_retries: 10
+#                    delay: 2000
+            # failed: 'doctrine://default?queue_name=failed'
+            sync:
+                dsn: 'sync://'
                 retry_strategy:
                     max_retries: 10
                     delay: 2000
-            # failed: 'doctrine://default?queue_name=failed'
-            # sync: 'sync://'
 
         routing:
             # Route your messages to the transports
-            'App\Message\TaskMessage': async
+            'App\Message\TaskMessage': sync
