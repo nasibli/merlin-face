@@ -35,21 +35,21 @@ class TaskMessageHandler implements MessageHandlerInterface
 
     private function processTask(TaskMessage $taskMessage)
     {
-        $result = $this->sendRequest($taskMessage);
-        if ($result->status === 'error') {
-            throw new \Exception('Task was processed with error');
+        $result = '';
+        while(!is_object($result) || $result->status === 'error') {
+            $result = $this->sendRequest($taskMessage);
+        }
+
+        $task = $this->taskRepository->find($taskMessage->getTask()->getId());
+        if ($result->retry_id === null) {
+            $task->setResult($result->result);
+            $task->setStatus(Task::STATUS_READY);
+            $this->taskRepository->save($task);
         } else {
-            $task = $this->taskRepository->find($taskMessage->getTask()->getId());
-            if ($result->retry_id === null) {
-                $task->setResult($result->result);
-                $task->setStatus(Task::STATUS_READY);
-                $this->taskRepository->save($task);
-            } else {
-                $taskMessage->setRetryId($result->retry_id);
-                $task->setStatus(Task::STATUS_WAIT);
-                $this->taskRepository->save($task);
-                throw new TaskNotReadyException($task);
-            }
+            $taskMessage->setRetryId($result->retry_id);
+            $task->setStatus(Task::STATUS_WAIT);
+            $this->taskRepository->save($task);
+            throw new TaskNotReadyException($task);
         }
     }
 

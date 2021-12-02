@@ -15,9 +15,6 @@ framework:
             # failed: 'doctrine://default?queue_name=failed'
             sync:
                 dsn: 'sync://'
-                retry_strategy:
-                    max_retries: 10
-                    delay: 2000
 
         routing:
             # Route your messages to the transports
